@@ -1,6 +1,6 @@
 {
   "name": "etl-excel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "extract, transform and load excel files into target data sources",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -20,7 +20,10 @@
     "url": "git+https://github.com/khattab88/etl-excel.git"
   },
   "author": "Excel Systems",
-  "keywords": ["etl", "excel"],
+  "keywords": [
+    "etl",
+    "excel"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/khattab88/etl-excel/issues"
