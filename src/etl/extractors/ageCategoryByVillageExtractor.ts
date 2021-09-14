@@ -1,8 +1,14 @@
-import { ExcelFile } from '../files/excel-file';
+import { WorkBook } from 'xlsx/types';
 import { Extractor } from './extractor';
 
-export class ageCategoryByVillageExtractor implements Extractor<ExcelFile, any> {
-    extract(file: ExcelFile) : any {
-        throw new Error('Method not implemented.');
-    }
+export class AgeCategoryByVillageExtractor implements Extractor {
+  extract(file: WorkBook): any {
+    return file.Sheets[file.SheetNames[1]];
+  }
 }
+
+// export class AgeCategoryByVillageExtractor implements Extractor<ExcelFile, any> {
+//     extract(file: ExcelFile) : any {
+//         return file.sheet;
+//     }
+// }

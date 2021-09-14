@@ -1,5 +1,9 @@
-import { ExcelFile } from "../files/excel-file";
+import { WorkBook } from 'xlsx/types';
 
-export interface Extractor<ExcelFile, TOutput> {
-    extract(file: ExcelFile): TOutput;
+export interface Extractor {
+  extract(file: WorkBook): any;
 }
+
+// export interface Extractor<ExcelFile, TOutput> {
+//     extract(file: ExcelFile): TOutput;
+// }

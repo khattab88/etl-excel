@@ -1,23 +1,39 @@
-import { WorkBook, WorkSheet, utils } from "xlsx";
+import { WorkBook, WorkSheet, utils } from 'xlsx';
 
-import { ExcelFile } from "./files/excel-file";
-import { Extractor } from "./extractors/extractor";
+import { FileType } from './enums/fileType';
+import { Extractor } from './extractors/extractor';
 import { Transformer } from './transformers/transformer';
+import { AgeCategoryByVillageExtractor } from './extractors/ageCategoryByVillageExtractor';
+import { AgeCategoryByVillageTransformer } from './transformers/ageCategoryByVillageTransformer';
 
 export class ETL {
-    private file: ExcelFile;
-    private extractor: Extractor<ExcelFile, any>;
-    private transformer: Transformer<any, any>;
+  private fileType?: FileType;
+  private file?: WorkBook;
 
-   constructor(file: ExcelFile, extractor: Extractor<ExcelFile, any>, transformer: Transformer<any, any>) {
+  private extractor: Extractor | any;
+  private transformer: Transformer | any;
+
+  constructor(fileType: FileType, file: WorkBook) {
+    this.fileType = fileType;
     this.file = file;
-    this.extractor = extractor;
-    this.transformer = transformer;
-   }
-    
-    load() {
-        const input = this.extractor.extract(this.file);
-        const output = this.transformer.transform(input);
-        return output;
+
+    switch (fileType) {
+      case FileType.AgeCategoryByVillage:
+        this.extractor = new AgeCategoryByVillageExtractor();
+        this.transformer = new AgeCategoryByVillageTransformer();
+      default:
+        this.extractor = new AgeCategoryByVillageExtractor();
+        this.transformer = new AgeCategoryByVillageTransformer();
     }
+
+    // console.log(this.fileType);
+  }
+
+  load() {
+    const input = this.extractor.extract(this.file);
+    const output = this.transformer.transform(input);
+
+    // console.log(output);
+    return output;
+  }
 }
