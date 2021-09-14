@@ -1,28 +1,23 @@
 import { WorkBook, WorkSheet, utils } from "xlsx";
 
+import { ExcelFile } from "./files/excel-file";
+import { Extractor } from "./extractors/extractor";
+import { Transformer } from './transformers/transformer';
+
 export class ETL {
+    private file: ExcelFile;
+    private extractor: Extractor<ExcelFile, any>;
+    private transformer: Transformer<any, any>;
 
-    private file: WorkBook | any;
-    private sheetNames: string[] | any;
-    private sheet: WorkSheet | any;
-
-
-    constructor(file: WorkBook) {
-        this.file = file;
-    }
-
-    private extract() {
-        this.sheetNames = this.file.SheetNames;
-        this.sheet = this.file.Sheets[this.sheetNames[1]];
-    }
+   constructor(file: ExcelFile, extractor: Extractor<ExcelFile, any>, transformer: Transformer<any, any>) {
+    this.file = file;
+    this.extractor = extractor;
+    this.transformer = transformer;
+   }
     
-    private transform() {}
-
-    
-    public load() {
-        this.extract();
-        this.transform();
-
-        return this.sheet;
+    load() {
+        const input = this.extractor.extract(this.file);
+        const output = this.transformer.transform(input);
+        return output;
     }
 }
