@@ -42,5 +42,9 @@
   },
   "files": [
     "lib/**/*"
-  ]
+  ],
+  "dependencies": {
+    "printj": "^1.3.0",
+    "xlsx": "^0.17.1"
+  }
 }
