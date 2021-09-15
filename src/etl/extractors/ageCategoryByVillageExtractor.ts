@@ -1,7 +1,15 @@
-import { WorkBook } from 'xlsx/types';
+import { WorkBook, WorkSheet } from 'xlsx/types';
 import { Extractor } from './extractor';
 
 export class AgeCategoryByVillageExtractor implements Extractor {
+
+  sheetIndex: number;
+  sheetName: string;
+
+  constructor() {
+    this.sheetIndex = 1;
+    this.sheetName = "Sheet1";
+  }
 
   extract(file: WorkBook): any {
 
@@ -83,9 +91,9 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     // 4.2 read TOTAL population in the Governorate
 
     /* ---------------------------------------------------------------------------- */
-    
 
-    const sheet = file.Sheets["Sheet1"];
+
+    const sheet = file.Sheets[this.sheetName];
 
     return sheet;
   }
