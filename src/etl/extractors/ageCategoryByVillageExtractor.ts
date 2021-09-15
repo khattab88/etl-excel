@@ -2,8 +2,92 @@ import { WorkBook } from 'xlsx/types';
 import { Extractor } from './extractor';
 
 export class AgeCategoryByVillageExtractor implements Extractor {
+
   extract(file: WorkBook): any {
-    return file.Sheets[file.SheetNames[1]];
+
+    /* ASSUMPTION: active sheet is 'Sheet1' */
+
+    /* ---------------------------------------------------------------------------- */
+
+    /// 1. read File Header
+
+      /* ASSUMPTION: Governorate name => cell: A2 */
+      // 1.1 get Governorate value
+
+      /* ASSUMPTION: Year value => cell: A3 */
+      // 1.2 get Year value
+
+    /* ---------------------------------------------------------------------------- */
+
+    /// 2. read Table Header (for column/field names used in mapping phase) 
+
+      /* ASSUMPTION: SectionOrCenter (قسم/مركز) => cell: A4  */
+      // 2.1 get SectionOrCenter column name
+
+      /* ASSUMPTION: SectionOrCenterType (حضر / ريف) [urban or rural] => cell: B4  */
+      // 2.2 get SectionOrCenter column name
+
+      /* ASSUMPTION: Village (شياخة / قرية) => cell: C4  */
+      // 2.3 get Village column name
+
+      /* ASSUMPTION: there is 21 age category (أقل من سنة, 1, 2, ..., 19, 20) => cell: D5 to cell: X5  */
+      // 2.4 get age category column name (0 - 20)
+
+      /* ASSUMPTION: sum of population/age category for all villages (الأجمالى) => cell: Y5 */
+      // 2.5 get sum of population/age category for all villages column name
+
+    /* ---------------------------------------------------------------------------- */
+
+    /// 3. read Table Body (data)
+
+    /* ASSUMPTION: first data column starts from col: A */
+    /* ASSUMPTION: first data row starts from row: 6 */
+    /* ASSUMPTION: first data cell MUST BE => cell: A6 */
+
+
+    // FOREACH SectionOrCenter (قسم/مركز) [Sub-Table]
+
+    /* ASSUMPTION: min data row index in Table = 6 */
+    // NOTE: n represents Min data row index in Sub-Table
+    // NOTE: m represents max data row index in Sub-Table
+    // NOTE: x represents current data row index, [WHERE n <= x <= m ]
+    // NOTE: z1, z2 represents row index of last two rows in Sub-Table (for sub-totals), [WHERE z1 = m + 1 , z2 = m + 2]
+
+      // 3.1 read value of SectionOrCenter name => cell(s): [A:x]
+
+      // 3.2 read value of SectionOrCenter Type name => cell(s): [B:x]
+
+      // 3.3 read value of Village name
+
+        // FOREACH Age Category in a Village
+          // 3.4 read value of Age Category population => cell(s): [C:x]
+
+          // 3.5 read value of TOTAL population in a village [CALCULATED] => cell(s): [Y:x]
+
+      // 3.6 read value of TOTAL population of Age Category in SectionOrCenter [CALCULATED]
+      // => cells: [D:z1] to [X:z1]
+      // => cells: [D:z2] to [X:z2]
+
+      // 3.7 read TOTAL population of SectionOrCenter
+      // => cell: [Y:z1], [Y:z2]
+      
+    /* ---------------------------------------------------------------------------- */
+
+    /// 4. read Table Footer (Totals)
+
+    /* Note: */ 
+
+    // 4.1 read TOTAL population of EACH Age category in the Governorate [CALCULATED]
+    // cells => 
+
+    // 4.2 read TOTAL population in the Governorate
+
+    /* ---------------------------------------------------------------------------- */
+    
+
+    const sheet = file.Sheets["Sheet1"];
+
+    return sheet;
   }
 }
 
