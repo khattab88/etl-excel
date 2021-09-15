@@ -45,7 +45,7 @@
     // NOTE: n represents Min data row index in Sub-Table
     // NOTE: m represents max data row index in Sub-Table
     // NOTE: x represents current data row index, [WHERE n <= x <= m ]
-    // NOTE: z1, z2 represents row index of last two rows in Sub-Table (for sub-totals), [WHERE z1 = m + 1 , z2 = m + 2]
+    // NOTE: z, z1, z2 represents row index of last two rows in Sub-Table (for sub-totals), [WHERE z1 = m + 1 , z2 = m + 2]
 
       // 3.1 read value of SectionOrCenter name => cell(s): [A:x]
 

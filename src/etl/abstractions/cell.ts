@@ -3,10 +3,10 @@ import { CellType } from "../enums/cellType";
 export class Cell {
     ref?: string;
     col?: string;
-    row?: number;
+    row: number;
 
     type?: CellType;
-    text?: string;
+    text: string;
     value?: string | number;
 
     constructor(ref: string, obj: any) {
