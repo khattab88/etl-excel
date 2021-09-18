@@ -6,18 +6,18 @@ import { Extractor } from './extractor';
 
 export class GenderByFollwerExtractor implements Extractor {
     file: WorkBook;
+    sheet: WorkSheet;
 
     constructor(file: WorkBook) {
         this.file = file;
+        this.sheet = file.Sheets[this.file.SheetNames[0]];
+      }
 
-        // this.activeSheetIndex = 0;
-    }
-    
     set activeSheetIndex(value: number) {
-        this.activeSheetIndex = value | 0;
+        throw new Error('Method not implemented.');
     }
 
-    extract() {
+    extract(): any {
         throw new Error('Method not implemented.');
     }
 }
