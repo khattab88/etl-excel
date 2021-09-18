@@ -19,10 +19,10 @@ export class ETL {
 
     switch (fileType) {
       case FileType.AgeCategoryByVillage:
-        this.extractor = new AgeCategoryByVillageExtractor();
+        this.extractor = new AgeCategoryByVillageExtractor(file);
         this.transformer = new AgeCategoryByVillageTransformer();
       default:
-        this.extractor = new AgeCategoryByVillageExtractor();
+        this.extractor = new AgeCategoryByVillageExtractor(file);
         this.transformer = new AgeCategoryByVillageTransformer();
     }
 

@@ -1,7 +1,10 @@
-import { WorkBook } from 'xlsx/types';
+import { WorkBook, WorkSheet } from 'xlsx/types';
 
 export interface Extractor {
-  extract(file: WorkBook): any;
+  readonly file: WorkBook;
+  set activeSheetIndex (value: number);
+
+  extract(): any;
 }
 
 // export interface Extractor<ExcelFile, TOutput> {
