@@ -20,8 +20,7 @@ export class AgeCategoryByVillageExtractor implements Extractor {
   extract(): any {
 
     // get !REF (A1, Yz)
-
-    const firstCell: string = "A1"; 
+    const firstCell: string = "A1";
     const lastCell: string | any = this.sheet['!ref']?.split(":")[1];
 
     const firstCol: string = "A";
@@ -31,16 +30,7 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     const lastRow: number = parseInt(lastCell.substr(1));
 
 
-    // get sheet cells
-    const cells = Object.entries(this.sheet)
-      .filter(([key, value]) => { return key.indexOf("!") < 0; })
-      .map(([key, value]) => { return new Cell(key, value) });
-
-    // get sheet columns
-    const columns = _.groupBy(cells, c => c.col);
-
-
-    let tableHeaders  : { name: string, displayName: string, col: string }[]
+    let tableHeaders: { name: string, displayName: string, col: string }[]
       = [
         { name: "SectionOrCenter", displayName: "قسم/مركز", col: "A" },
         { name: "villageType", displayName: "حضر / ريف", col: "B" },
@@ -70,13 +60,28 @@ export class AgeCategoryByVillageExtractor implements Extractor {
       ];
 
 
-    let sectionRows = columns[tableHeaders[0].col].filter(cell => cell.row >= firstRow && cell.row > lastCell);
+    // get sheet cells
+    const cells = Object.entries(this.sheet)
+      .filter(([key, value]) => { return key.indexOf("!") < 0; })
+      .map(([key, value]) => { return new Cell(key, value) });
+
+    // get sheet columns
+    const columns = _.groupBy(cells, c => c.col);
+
+
+    // read governorate cell
+    const governorate = cells.find(c => c.ref === "A2")?.text;
+
+    // read year cell
+    const year = cells.find(c => c.ref === "A3")?.text;
+
+
+    // get section rows
+    let sectionRows = columns[tableHeaders[0].col].filter(cell => cell.row >= firstRow);
 
     // get sections
     let sections: { start: number, end: number, text: string }[] = [];
-
-    let i = 0;
-    for (let j = 1; j < sectionRows.length; j++) {
+    for (let i = 0, j = 1; j < sectionRows.length; i++, j++) {
       let section = {
         start: sectionRows[i].row,
         end: sectionRows[j].row - 1,
@@ -86,26 +91,57 @@ export class AgeCategoryByVillageExtractor implements Extractor {
       sections.push(section);
     }
 
-    const governorate = cells.find(c => c.ref === "A2")?.text;
 
-    ////////////////////////////////////////////////////////////////////////////
+    // FOREACH section, read row values
+    let data = sections.map(section => {
+      const sectionName = section.text;
+      console.log(sectionName);
+
+      // get village type rows (urban, rural)
+      let villageTypeRows = columns[tableHeaders[1].col].filter(cell => cell.row >= section.start && cell.row < section.end -1);
+      console.log(villageTypeRows);
+
+      let villageTypes: { start: number, end: number, text: string }[] = [];
+      for(let i = 0, j = 1; j < villageTypeRows.length; i++, j++) {
+        let villageType = {
+          start: villageTypeRows[i].row,
+          end: villageTypeRows[j].row -1,
+          text: villageTypeRows[i].text
+        };
+
+        villageTypes.push(villageType);
+      }
+
+      // console.log(villageTypes);
+
+      console.log("---------------------------------------");
+
+      return {
+        name: sectionName,
+        villageTypes
+      }
+    });
 
     return {
       // sheet: this.sheet,
-      firstCell,
-      lastCell,
-      firstCol,
-      lastCol,
-      firstRow,
-      lastRow,
+      // firstCell,
+      // lastCell,
+      // firstCol,
+      // lastCol,
+      // firstRow,
+      // lastRow,
       // cells,
       // columns,
+      // governorate,
+      // year,
       // sectionRows,
       // sections: {
       //   count: sections.length,
       //   data: sections
       // },
-      // governorate,
+      data
     };
+
   }
+
 }
