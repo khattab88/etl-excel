@@ -1,6 +1,7 @@
 import { WorkBook, WorkSheet } from 'xlsx/types';
 import * as _ from "lodash";
 
+import { ErrorMessage } from '../enums/errorMessage';
 import { Cell } from '../abstractions/cell';
 import { Extractor } from './extractor';
 
@@ -11,10 +12,6 @@ export class AgeCategoryByVillageExtractor implements Extractor {
   constructor(file: WorkBook) {
     this.file = file;
     this.sheet = file.Sheets[this.file.SheetNames[1]];
-  }
-
-  set activeSheetIndex(value: number) {
-    throw new Error('Method not implemented.');
   }
 
   extract(): any {
@@ -76,11 +73,11 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     const year = cells.find(c => c.ref === "A3")?.text;
 
 
-    // get section rows
+    // get sections (sub-tables)
     let sectionRows = columns[tableHeaders[0].col].filter(cell => cell.row >= firstRow);
 
-    // get sections
     let sections: { start: number, end: number, text: string }[] = [];
+
     for (let i = 0, j = 1; j < sectionRows.length; i++, j++) {
       let section = {
         start: sectionRows[i].row,
@@ -98,14 +95,17 @@ export class AgeCategoryByVillageExtractor implements Extractor {
       console.log(sectionName);
 
       // get village type rows (urban, rural)
-      let villageTypeRows = columns[tableHeaders[1].col].filter(cell => cell.row >= section.start && cell.row < section.end -1);
+      let villageTypeRows = columns[tableHeaders[1].col].filter(cell => cell.row >= section.start && cell.row < section.end - 1);
       console.log(villageTypeRows);
 
       let villageTypes: { start: number, end: number, text: string }[] = [];
-      for(let i = 0, j = 1; j < villageTypeRows.length; i++, j++) {
+
+      // TODO: use DO-WHILE instead of FOR loop 
+      // (ensure that it will run at least once)
+      for (let i = 0, j = 1; j < villageTypeRows.length; i++, j++) {
         let villageType = {
           start: villageTypeRows[i].row,
-          end: villageTypeRows[j].row -1,
+          end: villageTypeRows[j].row - 1,
           text: villageTypeRows[i].text
         };
 
