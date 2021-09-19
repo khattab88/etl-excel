@@ -2,9 +2,13 @@ import { WorkBook, WorkSheet, utils } from 'xlsx';
 
 import { FileType } from './enums/fileType';
 import { Extractor } from './extractors/extractor';
-import { Transformer } from './transformers/transformer';
 import { AgeCategoryByVillageExtractor } from './extractors/ageCategoryByVillageExtractor';
+import { GenderByFollwerExtractor } from './extractors/genderByFollowerExtractor';
+import { Transformer } from './transformers/transformer';
 import { AgeCategoryByVillageTransformer } from './transformers/ageCategoryByVillageTransformer';
+import { GenderByFollowerTransformer } from './transformers/genderByFollowerTransformer';
+import { ErrorMessage } from './enums/errorMessage';
+
 
 export class ETL {
   private fileType?: FileType;
@@ -17,16 +21,21 @@ export class ETL {
     this.fileType = fileType;
     this.file = file;
 
-    switch (fileType) {
-      case FileType.AgeCategoryByVillage:
-        this.extractor = new AgeCategoryByVillageExtractor(file);
-        this.transformer = new AgeCategoryByVillageTransformer();
-      default:
-        this.extractor = new AgeCategoryByVillageExtractor(file);
-        this.transformer = new AgeCategoryByVillageTransformer();
+    // console.log(this.fileType);
+
+    if (fileType === FileType.AgeCategoryByVillage) 
+    {
+      this.extractor = new AgeCategoryByVillageExtractor(file);
+      this.transformer = new AgeCategoryByVillageTransformer();
+    } 
+    else if (fileType === FileType.GenderByFollower) {
+      this.extractor = new GenderByFollwerExtractor(file);
+      this.transformer = new GenderByFollowerTransformer();
+    }
+    else {
+      throw new Error(ErrorMessage.NoFileTypeSelected);
     }
 
-    // console.log(this.fileType);
   }
 
   load() {

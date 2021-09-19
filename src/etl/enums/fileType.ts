@@ -1,4 +1,4 @@
 export enum FileType {
-  AgeCategoryByVillage = 'ageCategoryByVillage',
-  GenderByFollwer = 'genderByFollwer',
+  AgeCategoryByVillage = 'AgeCategoryByVillage',
+  GenderByFollower = 'GenderByFollower',
 }

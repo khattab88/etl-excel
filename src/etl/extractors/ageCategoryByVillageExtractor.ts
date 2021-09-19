@@ -67,10 +67,10 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     const columns = _.groupBy(cells, c => c.col);
 
 
-    // read governorate cell
+    // read file header (governorate) cell
     const governorate = cells.find(c => c.ref === "A2")?.text;
 
-    // read year cell
+    // read file header (year) cell
     const year = cells.find(c => c.ref === "A3")?.text;
 
 

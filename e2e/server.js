@@ -17,7 +17,7 @@ var server = http.createServer(function (req, res) {
     var form = new formidable.IncomingForm();
 
     form.parse(req, function (err, fields, files) {
-        var fileType = fields.fileType.toLowerCase();
+        var fileType = fields.fileType;
 
         var upload = files[Object.keys(files)[0]];
         var file = XLSX.readFile(upload.path, { type: 'binary' });
@@ -40,8 +40,9 @@ html = [
     '<select name="fileType">',
     '',
     [
+        ["SelectFileType", "Select File Type"],
         ["AgeCategoryByVillage", "Age Category By Village File"],
-        ["GenderByFollwer", "Gender By Follwer File"]
+        ["GenderByFollower", "Gender By Follower File"]
     ].map(function(x) { return '<option value="' + x[0] + '">' + x[1] + '</option>'; }).join("\n"),
     '</select>',
     '<br>',
