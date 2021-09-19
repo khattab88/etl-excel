@@ -1,4 +1,4 @@
 export enum CellType {
-    String = "string",
-    Number = "number"  
+  String = 'string',
+  Number = 'number',
 }
