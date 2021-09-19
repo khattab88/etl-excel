@@ -27,34 +27,35 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     const lastRow: number = parseInt(lastCell.substr(1));
 
 
-    let tableHeaders: { name: string, displayName: string, col: string }[]
-      = [
-        { name: "SectionOrCenter", displayName: "قسم/مركز", col: "A" },
-        { name: "villageType", displayName: "حضر / ريف", col: "B" },
-        { name: "village", displayName: "شياخة / قرية", col: "C" },
-        { name: "ageCategory-0", displayName: "أقل من سنة", col: "D" },
-        { name: "ageCategory-1", displayName: "١", col: "E" },
-        { name: "ageCategory-2", displayName: "٢", col: "F" },
-        { name: "ageCategory-3", displayName: "٣", col: "G" },
-        { name: "ageCategory-4", displayName: "٤", col: "H" },
-        { name: "ageCategory-5", displayName: "٥", col: "I" },
-        { name: "ageCategory-6", displayName: "٦", col: "J" },
-        { name: "ageCategory-7", displayName: "٧", col: "K" },
-        { name: "ageCategory-8", displayName: "٨", col: "L" },
-        { name: "ageCategory-9", displayName: "٩", col: "M" },
-        { name: "ageCategory-10", displayName: "١٠", col: "N" },
-        { name: "ageCategory-11", displayName: "١١", col: "O" },
-        { name: "ageCategory-12", displayName: "١٢", col: "P" },
-        { name: "ageCategory-13", displayName: "١٣", col: "Q" },
-        { name: "ageCategory-14", displayName: "١٤", col: "R" },
-        { name: "ageCategory-15", displayName: "١٥", col: "S" },
-        { name: "ageCategory-16", displayName: "١٦", col: "T" },
-        { name: "ageCategory-17", displayName: "١٧", col: "U" },
-        { name: "ageCategory-18", displayName: "١٨", col: "V" },
-        { name: "ageCategory-19", displayName: "١٩", col: "W" },
-        { name: "ageCategory-20", displayName: "٢٠", col: "X" },
-        { name: "total", displayName: "الأجمالى", col: "Y" }
-      ];
+    let tableHeaders = {
+      SectionOrCenter: { displayName: "قسم/مركز", col: "A" },
+      villageType: { displayName: "حضر / ريف", col: "B" },
+      village: { displayName: "شياخة / قرية", col: "C" },
+      ageCategories: {
+        ageCategory_0: { displayName: "أقل من سنة", col: "D" },
+        ageCategory_1: { displayName: "١", col: "E" },
+        ageCategory_2: { displayName: "٢", col: "F" },
+        ageCategory_3: { displayName: "٣", col: "G" },
+        ageCategory_4: { displayName: "٤", col: "H" },
+        ageCategory_5: { displayName: "٥", col: "I" },
+        ageCategory_6: { displayName: "٦", col: "J" },
+        ageCategory_7: { displayName: "٧", col: "K" },
+        ageCategory_8: { displayName: "٨", col: "L" },
+        ageCategory_9: { displayName: "٩", col: "M" },
+        ageCategory_10: { displayName: "١٠", col: "N" },
+        ageCategory_11: { displayName: "١١", col: "O" },
+        ageCategory_12: { displayName: "١٢", col: "P" },
+        ageCategory_13: { displayName: "١٣", col: "Q" },
+        ageCategory_14: { displayName: "١٤", col: "R" },
+        ageCategory_15: { displayName: "١٥", col: "S" },
+        ageCategory_16: { displayName: "١٦", col: "T" },
+        ageCategory_17: { displayName: "١٧", col: "U" },
+        ageCategory_18: { displayName: "١٨", col: "V" },
+        ageCategory_19: { displayName: "١٩", col: "W" },
+        ageCategory_20: { displayName: "٢٠", col: "X" },
+      },
+      total: { displayName: "الأجمالى", col: "Y" }
+    };
 
 
     // get sheet cells
@@ -74,7 +75,7 @@ export class AgeCategoryByVillageExtractor implements Extractor {
 
 
     // get sections (sub-tables)
-    let sectionRows = columns[tableHeaders[0].col].filter(cell => cell.row >= firstRow);
+    let sectionRows = columns[tableHeaders.SectionOrCenter.col].filter(cell => cell.row >= firstRow);
 
     let sections: { start: number, end: number, text: string }[] = [];
 
@@ -90,12 +91,12 @@ export class AgeCategoryByVillageExtractor implements Extractor {
 
 
     // FOREACH section, read row values
-    let data = sections.map(section => {
+    let result = sections.map(section => {
       const sectionName = section.text;
       console.log(sectionName);
 
       // get village type rows (urban, rural)
-      let villageTypeRows = columns[tableHeaders[1].col].filter(cell => cell.row >= section.start && cell.row < section.end - 1);
+      let villageTypeRows = columns[tableHeaders.villageType.col].filter(cell => cell.row >= section.start && cell.row < section.end - 1);
       console.log(villageTypeRows);
 
       let villageTypes: { start: number, end: number, text: string }[] = [];
@@ -118,18 +119,24 @@ export class AgeCategoryByVillageExtractor implements Extractor {
 
       return {
         name: sectionName,
-        villageTypes
+        villageTypes,
+        // villages,
+        // ageCategories,
+        // total
       }
     });
 
+
     return {
       // sheet: this.sheet,
-      // firstCell,
-      // lastCell,
-      // firstCol,
-      // lastCol,
-      // firstRow,
-      // lastRow,
+      // meta: {
+      //   firstCell,
+      //   lastCell,
+      //   firstCol,
+      //   lastCol,
+      //   firstRow,
+      //   lastRow,
+      // },
       // cells,
       // columns,
       // governorate,
@@ -139,7 +146,10 @@ export class AgeCategoryByVillageExtractor implements Extractor {
       //   count: sections.length,
       //   data: sections
       // },
-      data
+      data: {
+        count: result.length,
+        sections: result
+      }
     };
 
   }
