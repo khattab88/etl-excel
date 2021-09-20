@@ -1,6 +1,6 @@
 {
   "name": "etl-excel",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "extract, transform and load excel files into target data sources",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
