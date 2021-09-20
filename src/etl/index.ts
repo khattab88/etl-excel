@@ -22,15 +22,21 @@ export class ETL {
 
     // console.log(this.fileType);
 
-    if (fileType === FileType.AgeCategoryByVillage) {
+    if (this.fileType === FileType.AgeCategoryByVillage) {
       this.extractor = new AgeCategoryByVillageExtractor(file);
       this.transformer = new AgeCategoryByVillageTransformer();
-    } else if (fileType === FileType.GenderByFollower) {
+    } else if (this.fileType === FileType.GenderByFollower) {
       this.extractor = new GenderByFollowerExtractor(file);
       this.transformer = new GenderByFollowerTransformer();
     } else {
       throw new Error(ErrorMessage.NoFileTypeSelected);
     }
+
+    console.log(this.file);
+
+    // if(this.file.Sheets["Sheet1"]['!cols'] == undefined) {
+    //   throw new Error(ErrorMessage.NoFileUploaded);
+    // }
   }
 
   load() {

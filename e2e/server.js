@@ -5,7 +5,7 @@ var fs = require('fs');
 var XLSX = require('xlsx');
 var formidable = require('formidable');
 
-var { FileType , ETL } = require('../lib/index');
+var { FileType, ETL } = require('../lib/index');
 
 var html = "";
 var PORT = 3000;
@@ -22,11 +22,25 @@ var server = http.createServer(function (req, res) {
         var upload = files[Object.keys(files)[0]];
         var file = XLSX.readFile(upload.path, { type: 'binary' });
 
-        const data = new ETL(fileType, file).load();
+        try {
+            const data = new ETL(fileType, file).load();
 
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.write(JSON.stringify(data));
-        res.end();
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.write(JSON.stringify(data));
+            res.end();
+        }
+        catch (err) {
+            console.log(err);
+
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.write(JSON.stringify({
+                error: {
+                    statusCode: 400,
+                    message: err.message
+                }
+            }));
+            res.end();
+        }
     });
 
 }).listen(PORT);
@@ -43,7 +57,7 @@ html = [
         ["SelectFileType", "Select File Type"],
         ["AgeCategoryByVillage", "Age Category By Village File"],
         ["GenderByFollower", "Gender By Follower File"]
-    ].map(function(x) { return '<option value="' + x[0] + '">' + x[1] + '</option>'; }).join("\n"),
+    ].map(function (x) { return '<option value="' + x[0] + '">' + x[1] + '</option>'; }).join("\n"),
     '</select>',
     '<br>',
     '<input type="file" id="file" name="file"/>',
@@ -51,6 +65,6 @@ html = [
     '<input type="submit" value="Submit Form">',
     '</form>',
     '</pre>'
-    ].join("\n");
+].join("\n");
 
 console.log('listening on port ' + PORT);

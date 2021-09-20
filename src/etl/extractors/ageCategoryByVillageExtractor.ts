@@ -16,6 +16,7 @@ export class AgeCategoryByVillageExtractor implements Extractor {
   }
 
   extract(): any {
+
     // get !REF (A1, Yz)
     const firstCell: string = 'A1';
     const lastCell: string | any = this.sheet['!ref']?.split(':')[1];
@@ -25,6 +26,7 @@ export class AgeCategoryByVillageExtractor implements Extractor {
 
     const firstRow: number = 6;
     const lastRow: number = parseInt(lastCell.substr(1));
+
 
     let tableHeaders = {
       SectionOrCenter: { displayName: 'قسم/مركز', col: 'A' },
@@ -56,6 +58,7 @@ export class AgeCategoryByVillageExtractor implements Extractor {
       total: { displayName: 'الأجمالى', col: 'Y' },
     };
 
+
     // get sheet cells
     const cells = Object.entries(this.sheet)
       .filter(([key, value]) => {
@@ -68,11 +71,13 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     // get sheet columns
     const columns = _.groupBy(cells, (c) => c.col);
 
+
     // read file header (governorate) cell
     const governorate = cells.find((c) => c.ref === 'A2')?.text;
 
     // read file header (year) cell
     const year = cells.find((c) => c.ref === 'A3')?.text;
+
 
     // get sections (sub-tables)
     let sectionRows = columns[tableHeaders.SectionOrCenter.col].filter((cell) => cell.row >= firstRow);
@@ -80,9 +85,13 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     let sections: { start: number; end: number; text: string }[] = [];
 
     for (let i = 0, j = 1; j < sectionRows.length; i++, j++) {
+
+      let sectionStart = sectionRows[i].row;
+      let sectionEnd = sectionRows[j].row - 1;
+
       let section = {
-        start: sectionRows[i].row,
-        end: sectionRows[j].row - 1,
+        start: sectionStart,
+        end: sectionEnd,
         text: sectionRows[i].text,
       };
 
@@ -127,6 +136,7 @@ export class AgeCategoryByVillageExtractor implements Extractor {
       };
     });
 
+
     return {
       // sheet: this.sheet,
       // meta: {
@@ -142,10 +152,10 @@ export class AgeCategoryByVillageExtractor implements Extractor {
       // governorate,
       // year,
       // sectionRows,
-      // sections: {
-      //   count: sections.length,
-      //   data: sections
-      // },
+      sections: {
+        count: sections.length,
+        data: sections
+      },
       data: {
         count: result.length,
         sections: result,

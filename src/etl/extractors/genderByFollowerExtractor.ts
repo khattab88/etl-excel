@@ -26,6 +26,7 @@ export class GenderByFollowerExtractor implements Extractor {
     const firstRow: number = 4;
     const lastRow: number = parseInt(lastCell.substr(1));
 
+
     let tableHeaders = {
       SectionOrCenter: { displayName: 'المركز', col: 'B' },
       village: { displayName: 'أسم القرية', col: 'C' },
@@ -50,8 +51,10 @@ export class GenderByFollowerExtractor implements Extractor {
     // get sheet columns
     const columns = _.groupBy(cells, (c) => c.col);
 
+
     // read file header (governorate) cell
     const governorate = cells.find((c) => c.ref === 'B1')?.text;
+
 
     // get sections (sub-tables)
     let sectionRows: any = columns[tableHeaders.SectionOrCenter.col]
@@ -68,6 +71,8 @@ export class GenderByFollowerExtractor implements Extractor {
     sectionRows = _.groupBy(sectionRows, (secRow) => secRow.text);
 
     // TODO: convert sectionRows into an array
+    
+
 
     return {
       // sheet: this.sheet,
