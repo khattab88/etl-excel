@@ -101,13 +101,13 @@ export class AgeCategoryByVillageExtractor implements Extractor {
     // FOREACH section, read row values
     let result = sections.map((section) => {
       const sectionName = section.text;
-      console.log(sectionName);
+      // console.log(sectionName);
 
       // get village type rows (urban, rural)
       let villageTypeRows = columns[tableHeaders.villageType.col].filter(
         (cell) => cell.row >= section.start && cell.row < section.end - 1,
       );
-      console.log(villageTypeRows);
+      // console.log(villageTypeRows);
 
       let villageTypes: { start: number; end: number; text: string }[] = [];
 

@@ -32,7 +32,7 @@ export class ETL {
       throw new Error(ErrorMessage.NoFileTypeSelected);
     }
 
-    console.log(this.file);
+    // console.log(this.file);
 
     // if(this.file.Sheets["Sheet1"]['!cols'] == undefined) {
     //   throw new Error(ErrorMessage.NoFileUploaded);
